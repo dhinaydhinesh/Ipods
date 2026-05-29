@@ -950,11 +950,49 @@ nav { animation: navSlideDown .5s ease both; }
 footer { animation: fadeIn 1s .5s ease both; }
 
 @media (max-width: 740px) {
-  .hero { grid-template-columns: 1fr; padding-top: 4rem; }
-  .hero-visual { order: -1; }
+  /* Nav */
   .nav-links { display: none; }
-  .modal { padding: 1.5rem; }
+  nav { padding: 0 4vw; }
+
+  /* Hero */
+  .hero { grid-template-columns: 1fr; padding-top: 3rem; padding-bottom: 3rem; gap: 2rem; }
+  .hero-visual { order: -1; }
+  .hero-title { font-size: 2.2rem; }
+  .hero-stat { right: 50%; transform: translateX(50%); bottom: -12px; white-space: nowrap; }
+
+  /* Products grid — single column on small phones */
+  .products-grid { grid-template-columns: 1fr; }
+
+  /* Store controls */
+  .store-controls { flex-direction: column; }
+  .store-search, .store-filter { width: 100%; }
+
+  /* Modal */
+  .modal { padding: 1.2rem; border-radius: 16px; }
   .modal-imgs .main { grid-column: span 1; }
+  .modal-actions { flex-direction: column; }
+  .modal-title { font-size: 1.5rem; }
+  .modal-price { font-size: 1.8rem; }
+
+  /* Owner panel — full width on mobile */
+  .owner-panel { width: 100%; right: -100%; }
+  .owner-panel.open { right: 0; }
+
+  /* Trust bar */
+  .trust-inner { gap: .6rem; }
+
+  /* Footer */
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+
+  /* Steps */
+  .steps { grid-template-columns: 1fr 1fr; }
+
+  /* Table scroll */
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+
+  /* Sections */
+  .section { padding: 3rem 4vw; }
 }
 </style>
 </head>
