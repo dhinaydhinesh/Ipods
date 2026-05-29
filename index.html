@@ -452,8 +452,8 @@ footer {
 .owner-fab.visible { display: flex; }
 
 .owner-panel {
-  position: fixed; top: 0; right: -380px; bottom: 0;
-  width: 360px; z-index: 800;
+  position: fixed; top: 0; right: -520px; bottom: 0;
+  width: 500px; z-index: 800;
   background: var(--white);
   border-left: 1px solid var(--border);
   box-shadow: -8px 0 40px rgba(26,23,20,.12);
@@ -582,6 +582,155 @@ footer {
   25%      { transform: translateX(-6px); }
   75%      { transform: translateX(6px); }
 }
+.owner-notes-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--accent);
+  margin-top: .6rem; margin-bottom: .3rem; display: block;
+}
+.owner-notes-input {
+  width: 100%; border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 8px 10px;
+  font-size: 12px; font-family: inherit;
+  background: var(--cream); color: var(--ink);
+  resize: vertical; min-height: 60px;
+  transition: border-color .2s; outline: none;
+  line-height: 1.5;
+}
+.owner-notes-input:focus { border-color: var(--accent); }
+.owner-notes-save {
+  margin-top: .4rem; font-size: 12px; font-weight: 600;
+  color: #fff; background: var(--accent);
+  border: none; border-radius: 6px;
+  padding: 5px 14px; cursor: pointer;
+  font-family: inherit; transition: background .2s;
+}
+.owner-notes-save:hover { background: #b84e22; }
+.owner-notes-saved {
+  font-size: 11px; color: #1A7A3A;
+  margin-left: 8px; opacity: 0;
+  transition: opacity .3s;
+}
+.owner-notes-saved.show { opacity: 1; }
+/* Spec editor */
+.spec-editor-toggle {
+  background: none; border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 12px;
+  font-size: 12px; font-weight: 600; color: var(--ink-muted);
+  cursor: pointer; font-family: inherit;
+  transition: background .2s, color .2s;
+  margin-top: 8px; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.spec-editor-toggle:hover { background: var(--cream); color: var(--ink); }
+.spec-editor-toggle .arrow { transition: rotate .25s; font-size: 10px; }
+.spec-editor-toggle.open .arrow { rotate: 180deg; }
+
+.spec-editor {
+  display: none; margin-top: 8px;
+  border: 1.5px solid var(--accent-light);
+  border-radius: 10px; overflow: hidden;
+}
+.spec-editor.open { display: block; }
+
+.spec-editor-head {
+  background: var(--accent-light);
+  padding: 8px 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--accent);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.spec-add-btn {
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 6px;
+  padding: 3px 10px; font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+
+.spec-row-edit {
+  display: grid; grid-template-columns: 1fr 1fr auto;
+  gap: 6px; padding: 6px 10px;
+  border-bottom: 1px solid var(--accent-light);
+  align-items: center;
+}
+.spec-row-edit:last-child { border-bottom: none; }
+.spec-edit-input {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 5px 8px; font-size: 12px; font-family: inherit;
+  background: var(--white); outline: none;
+  transition: border-color .2s; width: 100%;
+}
+.spec-edit-input:focus { border-color: var(--accent); }
+.spec-del-btn {
+  background: none; border: none; color: var(--ink-faint);
+  font-size: 16px; cursor: pointer; padding: 2px 4px;
+  line-height: 1; transition: color .2s;
+}
+.spec-del-btn:hover { color: #9A1A1A; }
+
+.spec-save-bar {
+  padding: 8px 10px; background: var(--cream);
+  display: flex; gap: 8px; align-items: center;
+  border-top: 1px solid var(--accent-light);
+}
+.spec-save-btn {
+  background: var(--ink); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 7px 16px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: background .2s;
+}
+.spec-save-btn:hover { background: var(--accent); }
+.spec-saved-msg {
+  font-size: 12px; color: #1A7A3A; font-weight: 600;
+  opacity: 0; transition: opacity .3s;
+}
+.spec-saved-msg.show { opacity: 1; }
+
+/* Basic info editor */
+.info-edit-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-top: 8px;
+}
+.info-edit-field { display: flex; flex-direction: column; gap: 3px; }
+.info-edit-label { font-size: 11px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .5px; }
+.info-edit-input {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: 13px; font-family: inherit;
+  background: var(--white); outline: none;
+  transition: border-color .2s;
+}
+.info-edit-input:focus { border-color: var(--accent); }
+.info-edit-input.full { grid-column: span 2; }
+
+.info-save-btn {
+  margin-top: 8px; width: 100%;
+  background: var(--ink); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 9px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: background .2s; display: flex;
+  align-items: center; justify-content: center; gap: 6px;
+}
+.info-save-btn:hover { background: var(--accent); }
+
+.owner-section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--ink-muted);
+  padding: 10px 0 4px; margin-top: 4px;
+  border-top: 1px dashed var(--border);
+}
+.owner-section-title:first-child { border-top: none; padding-top: 0; }
+
+/* collapse chevron for each product card */
+.owner-item-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; gap: 10px;
+}
+.owner-chevron { font-size: 11px; color: var(--ink-faint); transition: rotate .25s; }
+.owner-item-body { display: none; padding-top: 8px; }
+.owner-item-body.open { display: block; }
+.owner-item-header.open .owner-chevron { rotate: 180deg; }
+
 /* ---- END OWNER PANEL ---- */
 
 /* ---- ANIMATIONS ---- */
@@ -835,13 +984,13 @@ footer { animation: fadeIn 1s .5s ease both; }
       <span class="trust-item">✅ Tested &amp; Verified</span>
       <span class="trust-item">🔋 Battery Checked</span>
       <span class="trust-item">📦 Pan-India Shipping</span>
-      <span class="trust-item">↩️ 7-Day Returns</span>
+      <span class="trust-item">↩️ 7-Day Replacement</span>
       <span class="trust-item">💬 WhatsApp Support</span>
       <span class="trust-item">🎵 Pure Audio Bliss</span>
       <span class="trust-item">✅ Tested &amp; Verified</span>
       <span class="trust-item">🔋 Battery Checked</span>
       <span class="trust-item">📦 Pan-India Shipping</span>
-      <span class="trust-item">↩️ 7-Day Returns</span>
+      <span class="trust-item">↩️ 7-Day Replacement</span>
       <span class="trust-item">💬 WhatsApp Support</span>
       <span class="trust-item">🎵 Pure Audio Bliss</span>
     </div>
@@ -854,13 +1003,46 @@ footer { animation: fadeIn 1s .5s ease both; }
 ============================================================ -->
 <section class="section" id="catalog">
   <div class="section-inner">
+
     <p class="section-label reveal">Our Collection</p>
-    <h2 class="section-title reveal">iPod Classic Generations</h2>
-    <p class="section-sub reveal">Tap any card for full specs, photos &amp; video</p>
+
+    <h2 class="section-title reveal">
+      iPod Classic Generations
+    </h2>
+
+    <p class="section-sub reveal">
+      Tap any card for full specs, photos &amp; video
+    </p>
+
+    <!-- SEARCH + FILTER -->
+    <div class="store-controls">
+
+      <!-- Search Box -->
+      <input
+              type="text"
+              id="searchInput"
+              class="store-search"
+              placeholder="Search iPods..."
+      >
+
+      <!-- Generation Filter -->
+      <select
+              id="generationFilter"
+              class="store-filter"
+      >
+        <option value="all">All Models</option>
+        <option value="6.5th gen">6.5th Gen Classic</option>
+        <option value="6th gen">6th Gen Classic</option>
+        <option value="nano">iPod Nano</option>
+      </select>
+
+    </div>
+
+    <!-- PRODUCTS -->
     <div class="products-grid" id="productsGrid"></div>
+
   </div>
 </section>
-
 
 <!-- ============================================================
   COMPARISON TABLE
@@ -875,20 +1057,20 @@ footer { animation: fadeIn 1s .5s ease both; }
         <thead>
           <tr>
             <th>Feature</th>
-            <th>5th Gen (Video)</th>
-            <th>6th Gen (Classic)</th>
-            <th>7th Gen (Classic)</th>
+            <th>6th Gen Classic</th>
+            <th>6.5th Gen Classic</th>
+            <th>Nano 3rd Gen</th>
           </tr>
         </thead>
         <tbody>
-          <!-- CHANGE THIS: Update any comparison values you want -->
-          <tr><td>Release Year</td><td>2005 – 2006</td><td>2007</td><td>2009</td></tr>
-          <tr><td>Storage Options</td><td>30 / 60 GB</td><td>80 / 160 GB</td><td>120 / 160 GB</td></tr>
-          <tr><td>Battery (audio)</td><td>~14 hrs</td><td>~40 hrs</td><td>~36 hrs</td></tr>
-          <tr><td>Video Playback</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>Cover Flow</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>Genius Playlists</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td>Storage</td><td>80 GB HDD</td><td>120 GB HDD</td><td>4 GB Flash</td></tr>
+          <tr><td>Audio Battery</td><td>~36 hrs</td><td>~36 hrs</td><td>~24 hrs</td></tr>
+          <tr><td>Video Battery</td><td>7+ hrs</td><td>7+ hrs</td><td>~5 hrs</td></tr>
+          <tr><td>Video Formats</td><td>H.264, MPEG-4</td><td>H.264, MPEG-4</td><td>H.264, MPEG-4</td></tr>
+          <tr><td>Cover Flow</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>Genius Playlists</td><td class="no">—</td><td class="yes">✓</td><td class="no">—</td></tr>
           <tr><td>Click Wheel</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>Price</td><td>₹8,000</td><td>₹7,500</td><td>₹6,500</td></tr>
         </tbody>
       </table>
     </div>
@@ -1021,128 +1203,169 @@ const STORE_NAME = "YOUR Store Name";
 
 const products = [
 
-  // ── iPod 1 ──────────────────────────────────────────────
+  // ── iPod 1 — 6.5th Gen 120 GB ───────────────────────────
   {
-    id: 1,
-    gen:       "5th Gen",                    // Generation label
-    name:      "iPod Classic",               // Product name
-    storage:   "30 GB",                      // Storage size
-    condition: "Good",                       // Excellent / Good / Fair
-    price:     "₹4,500",                     // Your asking price in ₹
-    sold:      false,                        // true = show Sold Out
+    id:        1,
+    gen:       "6.5th Gen",
+    name:      "iPod Classic",
+    storage:   "120 GB",
+    condition: "Good",
+    price:     "₹7,500",
+    sold:      false,
 
-    // IMAGES: list your image file names inside the []
-    // Example: ["images/ipod5g-front.jpg", "images/ipod5g-back.jpg"]
+    // Serial / Model info (shown in specs, used for identification)
+    serial:    "2Z9110452C5",
+    model:     "MB562ZP",
+    firmware:  null,
+
     images: [],
+    video:  null,
 
-    // VIDEO: path to your video file, or null
-    // Example: "videos/ipod5g-demo.mp4"
-    video: null,
+    desc: "The 6.5th Gen iPod Classic — a refined version of the beloved 6th Gen with 120 GB of storage. Massive music library capacity, Cover Flow, and an outstanding 36-hour audio battery. A true audiophile's companion.",
 
-    // SHORT description shown in modal
-    desc: "The original video iPod with the iconic click wheel. A slim, timeless design that plays music, photos, and video. Perfect for vintage enthusiasts.",
-
-    // SPECS TABLE — add or remove rows as needed
     specs: [
-      ["Generation",    "5th (Video iPod)"],
-      ["Storage",       "30 GB HDD"],
-      ["Screen",        "2.5\" 320×240 colour LCD"],
-      ["Battery Life",  "~14 hrs audio / ~3.5 hrs video"],
-      ["Connector",     "30-pin Dock Connector"],
-      ["Condition",     "Good — minor wear, fully functional"],
-      // ADD MORE ROWS LIKE THIS:
-      // ["Your Label", "Your Value"],
+      ["Generation",        "6.5th Gen (Classic)"],
+      ["Model Number",      "MB562ZP"],
+      ["Serial Number",     "2Z9110452C5"],
+      ["Storage",           "120 GB HDD"],
+      ["Screen",            "2.5\" 320×240 colour LCD"],
+      ["Battery — Audio",   "~36 hrs"],
+      ["Battery — Video",   "7+ hrs"],
+      ["Video Formats",     "H.264, MPEG-4, Motion JPEG"],
+      ["Audio Formats",     "AAC, MP3, WAV, AIFF, Apple Lossless, Audible"],
+      ["Connector",         "30-pin Dock Connector"],
+      ["Special Features",  "Cover Flow, Genius, Search"],
+      ["Condition",         "Good — fully functional"],
     ],
 
-    // TAGS shown on the card (small chips)
-    tags: ["Click Wheel", "2.5\" Display", "Video Playback"],
+    tags: ["120 GB", "Cover Flow", "36hr Audio", "7+ hrs Video"],
+
+    // ADMIN ONLY — private notes visible only in the owner panel
+    // Add any issues, dents, scratches, repairs here
+    adminNotes: "Add notes here — e.g. small dent on back, battery replaced, screen scratch, etc.",
   },
 
-  // ── iPod 2 ──────────────────────────────────────────────
+  // ── iPod 2 — 6.5th Gen 120 GB (2nd unit) ───────────────
   {
-    id: 2,
+    id:        2,
+    gen:       "6.5th Gen",
+    name:      "iPod Classic",
+    storage:   "120 GB",
+    condition: "Good",
+    price:     "₹7,500",
+    sold:      false,
+
+    serial:    "8M839L3H2C5",
+    model:     "MB562LL",
+    firmware:  "2.0.1 PC",
+
+    images: [],
+    video:  null,
+
+    desc: "The 6.5th Gen iPod Classic with 120 GB storage and firmware 2.0.1. Cover Flow, Genius playlists, and outstanding battery life. Syncs with both Mac and PC via iTunes.",
+
+    specs: [
+      ["Generation",        "6.5th Gen (Classic)"],
+      ["Model Number",      "MB562LL"],
+      ["Serial Number",     "8M839L3H2C5"],
+      ["Storage",           "120 GB HDD"],
+      ["Firmware",          "2.0.1 PC"],
+      ["Screen",            "2.5\" 320×240 colour LCD"],
+      ["Battery — Audio",   "~36 hrs"],
+      ["Battery — Video",   "7+ hrs"],
+      ["Video Formats",     "H.264, MPEG-4, Motion JPEG"],
+      ["Audio Formats",     "AAC, MP3, WAV, AIFF, Apple Lossless, Audible"],
+      ["Connector",         "30-pin Dock Connector"],
+      ["Special Features",  "Cover Flow, Genius, Search"],
+      ["Condition",         "Good — fully functional"],
+    ],
+
+    tags: ["120 GB", "Cover Flow", "36hr Audio", "7+ hrs Video"],
+
+    adminNotes: "Add notes here — e.g. small dent on back, battery replaced, screen scratch, etc.",
+  },
+
+  // ── iPod 3 — 6th Gen 80 GB ──────────────────────────────
+  {
+    id:        3,
     gen:       "6th Gen",
     name:      "iPod Classic",
     storage:   "80 GB",
-    condition: "Excellent",
-    price:     "₹6,999",
-    sold:      false,
-
-    images: [],
-    video:  null,
-
-    desc: "The definitive iPod Classic. 40-hour battery, Cover Flow album art, and massive storage. The audiophile's first choice among all iPod generations.",
-
-    specs: [
-      ["Generation",    "6th (Classic)"],
-      ["Storage",       "80 GB HDD"],
-      ["Screen",        "2.5\" 320×240 colour LCD"],
-      ["Battery Life",  "~40 hrs audio / ~7 hrs video"],
-      ["Connector",     "30-pin Dock Connector"],
-      ["Special",       "Cover Flow, Search"],
-      ["Condition",     "Excellent — minimal wear"],
-    ],
-
-    tags: ["Cover Flow", "40hr Battery", "80 GB"],
-  },
-
-  // ── iPod 3 ──────────────────────────────────────────────
-  {
-    id: 3,
-    gen:       "6th Gen",
-    name:      "iPod Classic",
-    storage:   "160 GB",
     condition: "Good",
-    price:     "₹8,999",
+    price:     "₹8,000",
     sold:      false,
+
+    serial:    "8K817675Y5N",
+    model:     "MB029LL",
+    firmware:  "1.1.2 PC",
 
     images: [],
     video:  null,
 
-    desc: "Massive 160 GB — carry your entire music library everywhere. Same legendary 6th Gen reliability with double the storage.",
+    desc: "The original iPod Classic 6th Gen — the one that defined the lineup. 80 GB, Cover Flow, and 36-hour audio battery. A reliable, iconic device for serious music lovers.",
 
     specs: [
-      ["Generation",    "6th (Classic)"],
-      ["Storage",       "160 GB HDD"],
-      ["Screen",        "2.5\" 320×240 colour LCD"],
-      ["Battery Life",  "~40 hrs audio / ~7 hrs video"],
-      ["Connector",     "30-pin Dock Connector"],
-      ["Special",       "Cover Flow, Search"],
-      ["Condition",     "Good — some wear, works perfectly"],
+      ["Generation",        "6th Gen (Classic)"],
+      ["Model Number",      "MB029LL"],
+      ["Serial Number",     "8K817675Y5N"],
+      ["Storage",           "80 GB HDD"],
+      ["Firmware",          "1.1.2 PC"],
+      ["Screen",            "2.5\" 320×240 colour LCD"],
+      ["Battery — Audio",   "~36 hrs"],
+      ["Battery — Video",   "7+ hrs"],
+      ["Video Formats",     "H.264 (up to 2.5 Mbps), MPEG-4, Motion JPEG"],
+      ["Audio Formats",     "AAC, MP3, WAV, AIFF, Apple Lossless, Audible"],
+      ["Connector",         "30-pin Dock Connector"],
+      ["Special Features",  "Cover Flow, Search"],
+      ["Condition",         "Good — fully functional"],
     ],
 
-    tags: ["Cover Flow", "160 GB", "40hr Battery"],
+    tags: ["80 GB", "Cover Flow", "36hr Audio", "7+ hrs Video"],
+
+    adminNotes: "Add notes here — e.g. small dent on back, battery replaced, screen scratch, etc.",
   },
 
-  // ── iPod 4 ──────────────────────────────────────────────
+  // ── iPod 4 — Nano 3rd Gen 4 GB ──────────────────────────
   {
-    id: 4,
-    gen:       "7th Gen",
-    name:      "iPod Classic",
-    storage:   "160 GB",
-    condition: "Excellent",
-    price:     "₹10,500",
+    id:        4,
+    gen:       "Nano 3rd Gen",
+    name:      "iPod Nano",
+    storage:   "4 GB",
+    condition: "Good",
+    price:     "₹6,500",
     sold:      false,
+
+    serial:    "m7L751E46Y0P",
+    model:     "MA978ZP",
+    firmware:  null,
 
     images: [],
     video:  null,
 
-    desc: "The final iPod Classic ever made. Genius Playlists, Cover Flow, and 160 GB of storage. A collector's piece that still performs like no other.",
+    desc: "The iconic iPod Nano 3rd Gen — fat Nano design with a colour display, Cover Flow, and video playback. Compact, light, and perfect for everyday listening and on-the-go music.",
 
     specs: [
-      ["Generation",    "7th (Final Classic)"],
-      ["Storage",       "160 GB HDD"],
-      ["Screen",        "2.5\" 320×240 colour LCD"],
-      ["Battery Life",  "~36 hrs audio / ~6 hrs video"],
-      ["Connector",     "30-pin Dock Connector"],
-      ["Special",       "Genius Playlists, Cover Flow"],
-      ["Condition",     "Excellent — like new"],
+      ["Generation",        "Nano 3rd Gen"],
+      ["Model Number",      "MA978ZP"],
+      ["Serial Number",     "m7L751E46Y0P"],
+      ["Storage",           "4 GB Flash"],
+      ["Screen",            "2.0\" 320×240 colour LCD"],
+      ["Battery — Audio",   "~24 hrs"],
+      ["Battery — Video",   "~5 hrs"],
+      ["Video Formats",     "H.264 (up to 768 Kbps), MPEG-4"],
+      ["Audio Formats",     "AAC, MP3, WAV, AIFF, Apple Lossless, Audible"],
+      ["Connector",         "30-pin Dock Connector"],
+      ["Special Features",  "Cover Flow, Video Playback"],
+      ["Condition",         "Good — fully functional"],
     ],
 
-    tags: ["Genius Playlists", "160 GB", "Final Edition"],
+    tags: ["4 GB Flash", "Cover Flow", "24hr Audio", "Video Playback"],
+
+    adminNotes: "Add notes here — e.g. small dent on back, battery replaced, screen scratch, etc.",
   },
 
   // ── ADD MORE iPODS: copy the block above and paste here ──
+  // ── Make sure each new iPod has a unique id number ───────
 
 ];
 
@@ -1206,7 +1429,7 @@ function renderGrid() {
       </div>
       <div class="card-body">
         <div class="card-name">${p.name}</div>
-        <div class="card-storage">${p.storage} Hard Drive</div>
+        <div class="card-storage">${p.storage} ${p.gen === 'Nano' ? 'Flash' : p.gen === 'Mini' ? 'Storage' : 'Hard Drive'}</div>
         <div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         <div class="card-footer">
           <div>
@@ -1340,24 +1563,193 @@ function closeOwnerPanel() {
 function renderOwnerPanel() {
   const body = document.getElementById('ownerPanelBody');
   body.innerHTML = products.map(p => `
-    <div class="owner-item">
-      <div class="owner-item-info">
-        <div class="owner-item-name">${p.gen} · ${p.storage}</div>
-        <div class="owner-item-sub">${p.price} · ${p.condition}</div>
+    <div class="owner-item" style="flex-direction:column; align-items:stretch; gap:0; padding-bottom:1.2rem;">
+
+      <!-- ── Header (click to expand) ── -->
+      <div class="owner-item-header" onclick="toggleOwnerItem(${p.id}, this)">
+        <div class="owner-item-info">
+          <div class="owner-item-name">${p.gen} · ${p.storage} · ${p.name}</div>
+          <div class="owner-item-sub">${p.price} · ${p.model || ''} · ${p.serial || ''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <div class="toggle-wrap">
+            <span class="toggle-label ${p.sold ? 'sold' : 'avail'}" id="lbl-${p.id}">
+              ${p.sold ? 'Sold Out' : 'Available'}
+            </span>
+            <label class="toggle" onclick="event.stopPropagation()">
+              <input type="checkbox" ${p.sold ? 'checked' : ''}
+                     onchange="toggleSold(${p.id}, this.checked)">
+              <span class="toggle-track"></span>
+              <span class="toggle-thumb"></span>
+            </label>
+          </div>
+          <span class="owner-chevron">▼</span>
+        </div>
       </div>
-      <div class="toggle-wrap">
-        <span class="toggle-label ${p.sold ? 'sold' : 'avail'}" id="lbl-${p.id}">
-          ${p.sold ? 'Sold Out' : 'Available'}
-        </span>
-        <label class="toggle">
-          <input type="checkbox" ${p.sold ? 'checked' : ''}
-                 onchange="toggleSold(${p.id}, this.checked)">
-          <span class="toggle-track"></span>
-          <span class="toggle-thumb"></span>
-        </label>
+
+      <!-- ── Expandable body ── -->
+      <div class="owner-item-body" id="owner-body-${p.id}">
+
+        <!-- Basic Info -->
+        <div class="owner-section-title">📝 Basic Info</div>
+        <div class="info-edit-grid" id="info-grid-${p.id}">
+          <div class="info-edit-field">
+            <span class="info-edit-label">Name</span>
+            <input class="info-edit-input" id="ie-name-${p.id}" value="${p.name}">
+          </div>
+          <div class="info-edit-field">
+            <span class="info-edit-label">Generation</span>
+            <input class="info-edit-input" id="ie-gen-${p.id}" value="${p.gen}">
+          </div>
+          <div class="info-edit-field">
+            <span class="info-edit-label">Storage</span>
+            <input class="info-edit-input" id="ie-storage-${p.id}" value="${p.storage}">
+          </div>
+          <div class="info-edit-field">
+            <span class="info-edit-label">Price (₹)</span>
+            <input class="info-edit-input" id="ie-price-${p.id}" value="${p.price}">
+          </div>
+          <div class="info-edit-field">
+            <span class="info-edit-label">Condition</span>
+            <select class="info-edit-input" id="ie-cond-${p.id}">
+              <option ${p.condition==='Excellent'?'selected':''}>Excellent</option>
+              <option ${p.condition==='Good'?'selected':''}>Good</option>
+              <option ${p.condition==='Fair'?'selected':''}>Fair</option>
+            </select>
+          </div>
+          <div class="info-edit-field">
+            <span class="info-edit-label">Model No.</span>
+            <input class="info-edit-input" id="ie-model-${p.id}" value="${p.model||''}">
+          </div>
+          <div class="info-edit-field" style="grid-column:span 2;">
+            <span class="info-edit-label">Serial No.</span>
+            <input class="info-edit-input" id="ie-serial-${p.id}" value="${p.serial||''}">
+          </div>
+          <div class="info-edit-field" style="grid-column:span 2;">
+            <span class="info-edit-label">Description (shown to customers)</span>
+            <textarea class="info-edit-input" id="ie-desc-${p.id}" rows="3"
+              style="resize:vertical;">${p.desc||''}</textarea>
+          </div>
+        </div>
+        <button class="info-save-btn" onclick="saveBasicInfo(${p.id})">
+          💾 Save Basic Info
+          <span class="spec-saved-msg" id="info-saved-${p.id}">✓ Saved!</span>
+        </button>
+
+        <!-- Specs Editor -->
+        <div class="owner-section-title">⚙️ Specifications</div>
+        <button class="spec-editor-toggle" id="spec-toggle-${p.id}"
+          onclick="toggleSpecEditor(${p.id})">
+          Edit Specifications <span class="arrow">▼</span>
+        </button>
+        <div class="spec-editor" id="spec-editor-${p.id}">
+          <div class="spec-editor-head">
+            Spec Rows
+            <button class="spec-add-btn" onclick="addSpecRow(${p.id})">+ Add Row</button>
+          </div>
+          <div id="spec-rows-${p.id}">
+            ${p.specs.map((row, i) => specRowHTML(p.id, i, row[0], row[1])).join('')}
+          </div>
+          <div class="spec-save-bar">
+            <button class="spec-save-btn" onclick="saveSpecs(${p.id})">💾 Save Specs</button>
+            <span class="spec-saved-msg" id="spec-saved-${p.id}">✓ Specs updated!</span>
+          </div>
+        </div>
+
+        <!-- Admin Notes -->
+        <div class="owner-section-title">🔒 Private Admin Notes</div>
+        <textarea class="owner-notes-input" id="notes-${p.id}"
+          placeholder="e.g. dent on back, battery replaced, screen scratch..."
+          rows="3">${p.adminNotes || ''}</textarea>
+        <div style="display:flex;align-items:center;margin-top:6px;gap:8px;">
+          <button class="owner-notes-save" onclick="saveNotes(${p.id})">Save Note</button>
+          <span class="owner-notes-saved" id="saved-${p.id}">✓ Saved</span>
+        </div>
+
       </div>
     </div>
   `).join('');
+}
+
+function specRowHTML(pid, idx, label, value) {
+  return `<div class="spec-row-edit" id="specrow-${pid}-${idx}">
+    <input class="spec-edit-input" placeholder="Label"
+      value="${label}" id="spec-label-${pid}-${idx}">
+    <input class="spec-edit-input" placeholder="Value"
+      value="${value}" id="spec-value-${pid}-${idx}">
+    <button class="spec-del-btn" onclick="deleteSpecRow(${pid},${idx})" title="Delete row">✕</button>
+  </div>`;
+}
+
+function toggleOwnerItem(id, headerEl) {
+  const body = document.getElementById('owner-body-' + id);
+  body.classList.toggle('open');
+  headerEl.classList.toggle('open');
+}
+
+function toggleSpecEditor(id) {
+  const ed  = document.getElementById('spec-editor-' + id);
+  const btn = document.getElementById('spec-toggle-' + id);
+  ed.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function addSpecRow(pid) {
+  const container = document.getElementById('spec-rows-' + pid);
+  const p = products.find(x => x.id === pid);
+  const idx = p.specs.length;
+  p.specs.push(['', '']);
+  const div = document.createElement('div');
+  div.innerHTML = specRowHTML(pid, idx, '', '');
+  container.appendChild(div.firstElementChild);
+}
+
+function deleteSpecRow(pid, idx) {
+  const row = document.getElementById('specrow-' + pid + '-' + idx);
+  if (row) row.remove();
+}
+
+function saveSpecs(pid) {
+  const p = products.find(x => x.id === pid);
+  const container = document.getElementById('spec-rows-' + pid);
+  const rows = container.querySelectorAll('.spec-row-edit');
+  p.specs = [];
+  rows.forEach(row => {
+    const label = row.querySelector('[id^="spec-label"]').value.trim();
+    const value = row.querySelector('[id^="spec-value"]').value.trim();
+    if (label || value) p.specs.push([label, value]);
+  });
+  const msg = document.getElementById('spec-saved-' + pid);
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
+  renderGrid();
+  setTimeout(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-visible')), 50);
+}
+
+function saveBasicInfo(pid) {
+  const p = products.find(x => x.id === pid);
+  p.name      = document.getElementById('ie-name-'   + pid).value.trim();
+  p.gen       = document.getElementById('ie-gen-'    + pid).value.trim();
+  p.storage   = document.getElementById('ie-storage-'+ pid).value.trim();
+  p.price     = document.getElementById('ie-price-'  + pid).value.trim();
+  p.condition = document.getElementById('ie-cond-'   + pid).value;
+  p.model     = document.getElementById('ie-model-'  + pid).value.trim();
+  p.serial    = document.getElementById('ie-serial-' + pid).value.trim();
+  p.desc      = document.getElementById('ie-desc-'   + pid).value.trim();
+  const msg = document.getElementById('info-saved-' + pid);
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2500);
+  renderGrid();
+  setTimeout(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-visible')), 50);
+}
+
+function saveNotes(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  p.adminNotes = document.getElementById('notes-' + id).value;
+  const saved = document.getElementById('saved-' + id);
+  saved.classList.add('show');
+  setTimeout(() => saved.classList.remove('show'), 2000);
 }
 
 function toggleSold(id, isSold) {
@@ -1468,33 +1860,24 @@ const origRender = window.renderGrid;
 
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.getElementById("searchInput");
-  const generationFilter = document.getElementById("generationFilter");
+// Search & filter — works with dynamically rendered cards
+function filterProducts() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const gen    = document.getElementById('generationFilter').value.toLowerCase();
 
-  function filterProducts() {
-    const search = searchInput.value.toLowerCase();
-    const generation = generationFilter.value.toLowerCase();
+  document.querySelectorAll('.product-card').forEach(card => {
+    const text = card.innerText.toLowerCase();
+    const matchSearch = !search || text.includes(search);
+    const matchGen    = gen === 'all' || text.includes(gen);
+    card.style.display = (matchSearch && matchGen) ? '' : 'none';
+  });
+}
 
-    const cards = document.querySelectorAll(".product-card");
-
-    cards.forEach(card => {
-      const text = card.innerText.toLowerCase();
-
-      const matchesSearch = text.includes(search);
-      const matchesGeneration =
-        generation === "all" || text.includes(generation);
-
-      if (matchesSearch && matchesGeneration) {
-        card.style.display = "";
-      } else {
-        card.style.display = "none";
-      }
-    });
-  }
-
-  searchInput.addEventListener("input", filterProducts);
-  generationFilter.addEventListener("change", filterProducts);
+document.addEventListener('DOMContentLoaded', () => {
+  const si = document.getElementById('searchInput');
+  const gf = document.getElementById('generationFilter');
+  if (si) si.addEventListener('input',  filterProducts);
+  if (gf) gf.addEventListener('change', filterProducts);
 });
 </script>
 
