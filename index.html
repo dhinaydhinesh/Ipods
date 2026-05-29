@@ -7,7 +7,7 @@
 <!-- ============================================================
   CHANGE THIS: Your website tab title
 ============================================================ -->
-<title>YOUR STORE NAME — Refurbished iPod Classics</title>
+<title>IPOD ERA — Refurbished iPod Classics</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -324,7 +324,87 @@ td:first-child { color: var(--ink-muted); font-size: 13px; }
 .step-title { font-weight: 600; font-size: 15px; margin-bottom: 5px; }
 .step-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
 
-/* ---- MODAL ---- */
+/* ---- IMAGE CAROUSEL in modal ---- */
+.modal-carousel { position: relative; margin-bottom: 1.6rem; }
+.carousel-main {
+  background: #F2EEE9; border-radius: 16px;
+  height: 280px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  cursor: zoom-in; position: relative;
+}
+.carousel-main img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain; padding: 12px;
+  transition: opacity .25s;
+}
+.carousel-thumbs {
+  display: flex; gap: 8px; margin-top: 10px;
+  overflow-x: auto; padding-bottom: 4px;
+}
+.carousel-thumbs::-webkit-scrollbar { height: 4px; }
+.carousel-thumbs::-webkit-scrollbar-track { background: transparent; }
+.carousel-thumbs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.carousel-thumb {
+  flex-shrink: 0; width: 64px; height: 64px;
+  border-radius: 10px; overflow: hidden;
+  background: #F2EEE9; cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color .2s;
+}
+.carousel-thumb.active { border-color: var(--accent); }
+.carousel-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.carousel-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.9); border: 1px solid var(--border);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; transition: background .2s;
+}
+.carousel-arrow:hover { background: #fff; }
+.carousel-arrow.prev { left: 8px; }
+.carousel-arrow.next { right: 8px; }
+.carousel-counter {
+  position: absolute; bottom: 10px; right: 12px;
+  background: rgba(26,23,20,.55); color: #fff;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 100px;
+}
+
+/* ---- LIGHTBOX ---- */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 900;
+  background: rgba(10,8,6,.92);
+  align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lightbox-img {
+  max-width: 92vw; max-height: 88vh;
+  object-fit: contain; border-radius: 8px;
+  user-select: none;
+}
+.lightbox-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: none;
+  color: #fff; font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.lightbox-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: none;
+  color: #fff; font-size: 22px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.lightbox-arrow:hover { background: rgba(255,255,255,.28); }
+.lightbox-arrow.prev { left: 1rem; }
+.lightbox-arrow.next { right: 1rem; }
+.lightbox-counter {
+  position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.6); font-size: 13px;
+}
 .overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(26,23,20,.65);
@@ -1010,7 +1090,7 @@ footer { animation: fadeIn 1s .5s ease both; }
     -->
 
     <!-- OPTION B: Text logo — CHANGE the name below -->
-    <span class="nav-logo-text"><span>YOUR</span> Store Name</span>
+    <span class="nav-logo-text"><span></span> IPOD ERA</span>
 
   </a>
   <ul class="nav-links">
@@ -1216,7 +1296,7 @@ footer { animation: fadeIn 1s .5s ease both; }
 <footer>
   <div class="footer-inner">
     <!-- CHANGE THIS: footer brand name -->
-    <div class="footer-brand"><span>YOUR</span> Store Name</div>
+    <div class="footer-brand"><span></span>IPOD ERA</div>
     <div class="footer-links">
       <a href="#catalog">Catalog</a>
       <a href="#compare">Compare</a>
@@ -1225,7 +1305,7 @@ footer { animation: fadeIn 1s .5s ease both; }
       <a href="https://wa.me/91XXXXXXXXXX" target="_blank">WhatsApp</a>
     </div>
     <!-- CHANGE THIS: footer copyright text -->
-    <div style="font-size:13px;">© 2025 YOUR Store Name · Tamil Nadu, India</div>
+    <div style="font-size:13px;">© 2025 IPOD ERA · Tamil Nadu, India</div>
   </div>
 </footer>
 
@@ -1236,7 +1316,7 @@ footer { animation: fadeIn 1s .5s ease both; }
 <div class="overlay" id="overlay" onclick="closeOverlay(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-imgs" id="modalImgs"></div>
+    <div class="modal-carousel" id="modalCarousel"></div>
     <span class="modal-tag" id="modalGen"></span>
     <h2 class="modal-title" id="modalTitle"></h2>
     <p class="modal-storage" id="modalStorage"></p>
@@ -1273,9 +1353,9 @@ const WHATSAPP_NUMBER = "91XXXXXXXXXX"; // e.g. "919876543210"
 
 
 // ============================================================
-// STEP 2: YOUR STORE NAME (shown in stock counter area)
+// STEP 2: IPOD ERA (shown in stock counter area)
 // ============================================================
-const STORE_NAME = "YOUR Store Name";
+const STORE_NAME = "IPOD ERA";
 
 
 // ============================================================
@@ -1540,6 +1620,101 @@ function renderGrid() {
   `).join('');
 }
 
+// ── Carousel state ────────────────────────────────────────────
+let _carouselImages = [];
+let _carouselIdx    = 0;
+
+function renderCarousel(images, activeIdx) {
+  _carouselImages = images || [];
+  _carouselIdx    = activeIdx || 0;
+  const wrap = document.getElementById('modalCarousel');
+  if (!wrap) return;
+
+  if (!_carouselImages.length) {
+    wrap.innerHTML = `
+      <div style="background:#F2EEE9;border-radius:16px;height:200px;display:flex;align-items:center;justify-content:center;">
+        <svg width="60" viewBox="0 0 24 24" fill="none" stroke="#C2BDB7" stroke-width="1.2">
+          <rect x="5" y="2" width="14" height="20" rx="3"/>
+          <circle cx="12" cy="15" r="3.5"/>
+          <rect x="9" y="6" width="6" height="4" rx="1"/>
+        </svg>
+      </div>`;
+    return;
+  }
+
+  const arrows = _carouselImages.length > 1 ? `
+    <button class="carousel-arrow prev" onclick="carouselNav(-1)">‹</button>
+    <button class="carousel-arrow next" onclick="carouselNav(1)">›</button>
+    <div class="carousel-counter" id="carouselCounter">${_carouselIdx+1} / ${_carouselImages.length}</div>` : '';
+
+  const thumbs = _carouselImages.length > 1 ? `
+    <div class="carousel-thumbs" id="carouselThumbs">
+      ${_carouselImages.map((src, i) => `
+        <div class="carousel-thumb ${i===_carouselIdx?'active':''}" onclick="carouselGoTo(${i})">
+          <img src="${src}" alt="photo ${i+1}" loading="lazy">
+        </div>`).join('')}
+    </div>` : '';
+
+  wrap.innerHTML = `
+    <div class="carousel-main" id="carouselMain" onclick="openLightbox(${_carouselIdx})">
+      <img src="${_carouselImages[_carouselIdx]}" alt="iPod photo" id="carouselMainImg">
+      ${arrows}
+    </div>
+    ${thumbs}`;
+}
+
+function carouselNav(dir) {
+  _carouselIdx = (_carouselIdx + dir + _carouselImages.length) % _carouselImages.length;
+  carouselGoTo(_carouselIdx);
+}
+
+function carouselGoTo(idx) {
+  _carouselIdx = idx;
+  const img = document.getElementById('carouselMainImg');
+  if (img) { img.style.opacity = '0'; setTimeout(() => { img.src = _carouselImages[idx]; img.style.opacity = '1'; }, 150); }
+  const counter = document.getElementById('carouselCounter');
+  if (counter) counter.textContent = `${idx+1} / ${_carouselImages.length}`;
+  document.querySelectorAll('.carousel-thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+
+// ── Lightbox ──────────────────────────────────────────────────
+function openLightbox(idx) {
+  _carouselIdx = idx;
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = _carouselImages[idx];
+  document.getElementById('lbCounter').textContent = _carouselImages.length > 1 ? `${idx+1} / ${_carouselImages.length}` : '';
+  document.getElementById('lbPrev').style.display = _carouselImages.length > 1 ? '' : 'none';
+  document.getElementById('lbNext').style.display = _carouselImages.length > 1 ? '' : 'none';
+  lb.classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function lbNav(dir) {
+  _carouselIdx = (_carouselIdx + dir + _carouselImages.length) % _carouselImages.length;
+  document.getElementById('lightboxImg').src = _carouselImages[_carouselIdx];
+  document.getElementById('lbCounter').textContent = `${_carouselIdx+1} / ${_carouselImages.length}`;
+  carouselGoTo(_carouselIdx);
+}
+
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'Escape')     closeLightbox();
+  } else {
+    if (e.key === 'Escape') closeModal();
+  }
+});
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+// ── Modal open/close ──────────────────────────────────────────
 function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
@@ -1551,7 +1726,7 @@ function openModal(id) {
   cond.textContent = p.condition;
   cond.className   = 'modal-cond ' + condClass(p.condition);
   document.getElementById('modalDesc').textContent     = p.desc;
-  document.getElementById('modalImgs').innerHTML       = imgHTML(p.images, true);
+  renderCarousel(p.images, 0);
   document.getElementById('modalSpecs').innerHTML      = p.specs.map(([k,v]) =>
     `<li><span>${k}</span><span>${v}</span></li>`).join('');
   document.getElementById('modalVideo').innerHTML      = p.video
@@ -1560,7 +1735,6 @@ function openModal(id) {
   document.getElementById('modalWaBtn').href = waLink(p);
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  // Stagger spec rows
   setTimeout(() => {
     document.querySelectorAll('.spec-list li').forEach((li, i) => {
       setTimeout(() => li.classList.add('spec-visible'), i * 50 + 100);
@@ -1568,9 +1742,8 @@ function openModal(id) {
   }, 200);
 }
 
-function closeModal()           { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
-function closeOverlay(e)        { if (e.target === document.getElementById('overlay')) closeModal(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function closeModal()    { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
+function closeOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
 
 renderGrid();
 
@@ -2001,12 +2174,17 @@ function safeFilename(name) {
   return name.replace(/[^a-zA-Z0-9.\-_]/g, '_').toLowerCase();
 }
 
-// ── Convert DataURL → pure base64 ────────────────────────────
-function dataURLtoBase64(dataURL) {
-  return dataURL.split(',')[1];
+// ── Read file as ArrayBuffer ──────────────────────────────────
+function readFileAsArrayBuffer(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsArrayBuffer(file);
+  });
 }
 
-// ── Read file as DataURL ──────────────────────────────────────
+// ── Read file as DataURL (for image previews only) ────────────
 function readFileAsDataURL(file) {
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -2014,6 +2192,76 @@ function readFileAsDataURL(file) {
     r.onerror = rej;
     r.readAsDataURL(file);
   });
+}
+
+// ── ArrayBuffer → clean base64 (works for any binary file) ───
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+  return btoa(binary);
+}
+
+// ── Upload via Git Blobs API (handles large files / videos) ──
+async function ghPutFileLarge(path, arrayBuffer, commitMessage) {
+  // Step 1: Create a blob
+  const blobRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/blobs`, {
+    method: 'POST',
+    headers: ghHeaders(),
+    body: JSON.stringify({
+      content:  arrayBufferToBase64(arrayBuffer),
+      encoding: 'base64'
+    })
+  });
+  if (!blobRes.ok) {
+    const e = await blobRes.json();
+    throw new Error(e.message || blobRes.statusText);
+  }
+  const blob = await blobRes.json();
+
+  // Step 2: Get latest commit SHA on branch
+  const refRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/ref/heads/${GH_BRANCH}`, { headers: ghHeaders() });
+  if (!refRes.ok) throw new Error('Could not get branch ref');
+  const ref = await refRes.json();
+  const latestCommitSha = ref.object.sha;
+
+  // Step 3: Get current tree
+  const commitRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/commits/${latestCommitSha}`, { headers: ghHeaders() });
+  const commit = await commitRes.json();
+  const treeSha = commit.tree.sha;
+
+  // Step 4: Create new tree with the file
+  const treeRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/trees`, {
+    method: 'POST',
+    headers: ghHeaders(),
+    body: JSON.stringify({
+      base_tree: treeSha,
+      tree: [{ path, mode: '100644', type: 'blob', sha: blob.sha }]
+    })
+  });
+  if (!treeRes.ok) throw new Error('Could not create tree');
+  const tree = await treeRes.json();
+
+  // Step 5: Create commit
+  const newCommitRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/commits`, {
+    method: 'POST',
+    headers: ghHeaders(),
+    body: JSON.stringify({ message: commitMessage, tree: tree.sha, parents: [latestCommitSha] })
+  });
+  if (!newCommitRes.ok) throw new Error('Could not create commit');
+  const newCommit = await newCommitRes.json();
+
+  // Step 6: Update branch ref
+  const updateRes = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/git/refs/heads/${GH_BRANCH}`, {
+    method: 'PATCH',
+    headers: ghHeaders(),
+    body: JSON.stringify({ sha: newCommit.sha, force: false })
+  });
+  if (!updateRes.ok) throw new Error('Could not update branch ref');
 }
 
 // ── TOKEN SETUP UI ────────────────────────────────────────────
@@ -2066,8 +2314,8 @@ async function handleImageUpload(pid, input) {
     const ghPath    = `images/${filename}`;
     ghStatus(pid, `⏫ Uploading ${filename}…`, false);
     try {
-      const dataURL  = await readFileAsDataURL(file);
-      const b64      = dataURLtoBase64(dataURL);
+      const buffer = await readFileAsArrayBuffer(file);
+      const b64    = arrayBufferToBase64(buffer);
       await ghPutFile(ghPath, b64, `Add image for iPod ${pid}: ${filename}`);
       const url = ghRawURL(ghPath);
       p.images.push(url);
@@ -2134,9 +2382,8 @@ async function handleVideoUpload(pid, input) {
   if (wrap) wrap.innerHTML = '<span style="font-size:12px;color:var(--ink-muted);display:block;margin-top:6px;">⏫ Uploading to GitHub…</span>';
 
   try {
-    const dataURL = await readFileAsDataURL(file);
-    const b64     = dataURLtoBase64(dataURL);
-    await ghPutFile(ghPath, b64, `Add video for iPod ${pid}: ${filename}`);
+    const buffer = await readFileAsArrayBuffer(file);
+    await ghPutFileLarge(ghPath, buffer, `Add video for iPod ${pid}: ${filename}`);
     const url = ghRawURL(ghPath);
     p.video = url;
     await ghSaveDataJson();
@@ -2296,6 +2543,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (gf) gf.addEventListener('change', filterProducts);
 });
 </script>
+
+<!-- ============================================================
+  LIGHTBOX
+============================================================ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-arrow prev" id="lbPrev" onclick="lbNav(-1)">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-arrow next" id="lbNext" onclick="lbNav(1)">›</button>
+  <div class="lightbox-counter" id="lbCounter"></div>
+</div>
 
 </body>
 </html>
