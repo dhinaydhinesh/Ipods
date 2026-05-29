@@ -1621,7 +1621,7 @@ function closeOwnerPanel() {
 
 function renderOwnerPanel() {
   const body = document.getElementById('ownerPanelBody');
-  body.innerHTML = products.map(p => `
+  body.innerHTML = renderGhTokenSection() + products.map(p => `
     <div class="owner-item" style="flex-direction:column; align-items:stretch; gap:0; padding-bottom:1.2rem;">
 
       <!-- ── Header (click to expand) ── -->
@@ -1724,6 +1724,8 @@ function renderOwnerPanel() {
               <button class="video-preview-remove" onclick="removeVideo(${p.id})">✕ Remove</button>
             </div>` : '<span style="font-size:12px;color:var(--ink-faint);display:block;margin-top:6px;">No video yet</span>'}
         </div>
+        <!-- GitHub upload status -->
+        <div id="gh-status-${p.id}" style="font-size:12px;font-weight:600;margin-top:8px;min-height:18px;transition:opacity 1s;opacity:0;"></div>
         <button class="info-save-btn" onclick="saveBasicInfo(${p.id})">
           💾 Save Basic Info
           <span class="spec-saved-msg" id="info-saved-${p.id}">✓ Saved!</span>
@@ -1845,25 +1847,202 @@ function saveNotes(id) {
   setTimeout(() => saved.classList.remove('show'), 2000);
 }
 
+// ══════════════════════════════════════════════════════════════
+//  GITHUB INTEGRATION
+//  Uploads images → images/   videos → videos/
+//  Saves product media map → data.json  (root of repo)
+//  Token stored in localStorage (never sent anywhere except GitHub API)
+// ══════════════════════════════════════════════════════════════
+
+const GH_OWNER  = 'dhinaydhinesh';
+const GH_REPO   = 'Ipods';
+const GH_BRANCH = 'main';
+const GH_API    = 'https://api.github.com';
+
+function ghToken() { return localStorage.getItem('gh_token') || ''; }
+
+function ghHeaders() {
+  return {
+    'Authorization': 'token ' + ghToken(),
+    'Content-Type':  'application/json',
+    'Accept':        'application/vnd.github+json'
+  };
+}
+
+// ── Show status badge inside admin panel ──────────────────────
+function ghStatus(pid, msg, isError) {
+  const el = document.getElementById('gh-status-' + pid);
+  if (!el) return;
+  el.textContent  = msg;
+  el.style.color  = isError ? '#9A1A1A' : '#1A7A3A';
+  el.style.opacity = '1';
+  if (!isError) setTimeout(() => { el.style.opacity = '0'; }, 4000);
+}
+
+// ── Get existing file SHA (needed for overwrite) ──────────────
+async function ghGetSHA(path) {
+  try {
+    const r = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/contents/${path}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d.sha || null;
+  } catch { return null; }
+}
+
+// ── Commit a file (create or update) ─────────────────────────
+async function ghPutFile(path, base64Content, message) {
+  const sha = await ghGetSHA(path);
+  const body = { message, content: base64Content, branch: GH_BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, {
+    method:  'PUT',
+    headers: ghHeaders(),
+    body:    JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const err = await r.json();
+    throw new Error(err.message || r.statusText);
+  }
+  return await r.json();
+}
+
+// ── Delete a file from GitHub ─────────────────────────────────
+async function ghDeleteFile(path, message) {
+  const sha = await ghGetSHA(path);
+  if (!sha) return; // already gone
+  const r = await fetch(`${GH_API}/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, {
+    method:  'DELETE',
+    headers: ghHeaders(),
+    body:    JSON.stringify({ message, sha, branch: GH_BRANCH })
+  });
+  if (!r.ok) {
+    const err = await r.json();
+    throw new Error(err.message || r.statusText);
+  }
+}
+
+// ── Save data.json to repo (maps product ids → file paths) ───
+async function ghSaveDataJson() {
+  const map = {};
+  products.forEach(p => {
+    map[p.id] = { images: p.images || [], video: p.video || null };
+  });
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(map, null, 2))));
+  await ghPutFile('data.json', content, 'Update product media map');
+}
+
+// ── Load data.json from repo on page start ────────────────────
+async function ghLoadDataJson() {
+  try {
+    const r = await fetch(`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/data.json?t=${Date.now()}`);
+    if (!r.ok) return;
+    const map = await r.json();
+    products.forEach(p => {
+      if (map[p.id]) {
+        if (map[p.id].images && map[p.id].images.length) p.images = map[p.id].images;
+        if (map[p.id].video) p.video = map[p.id].video;
+      }
+    });
+    renderGrid();
+    setTimeout(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-visible')), 50);
+  } catch(e) {
+    console.warn('Could not load data.json from GitHub:', e);
+  }
+}
+
+// Load on startup
+ghLoadDataJson();
+
+// ── Raw GitHub URL helper ─────────────────────────────────────
+function ghRawURL(path) {
+  return `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}`;
+}
+
+// ── Sanitise filename ─────────────────────────────────────────
+function safeFilename(name) {
+  return name.replace(/[^a-zA-Z0-9.\-_]/g, '_').toLowerCase();
+}
+
+// ── Convert DataURL → pure base64 ────────────────────────────
+function dataURLtoBase64(dataURL) {
+  return dataURL.split(',')[1];
+}
+
+// ── Read file as DataURL ──────────────────────────────────────
+function readFileAsDataURL(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = e => res(e.target.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ── TOKEN SETUP UI ────────────────────────────────────────────
+function renderGhTokenSection() {
+  const saved = ghToken();
+  return `
+    <div id="gh-token-section" style="background:#f7f3ee;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:1.2rem;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">🔑 GitHub Token</div>
+      ${saved
+        ? `<div style="font-size:12px;color:#1A7A3A;margin-bottom:6px;">✓ Token saved — uploads go to GitHub</div>
+           <button onclick="clearGhToken()" style="font-size:11px;color:#9A1A1A;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;">✕ Remove token</button>`
+        : `<div style="font-size:12px;color:var(--ink-muted);margin-bottom:8px;line-height:1.5;">Paste your GitHub Personal Access Token to enable uploads directly to your repo.<br>
+           <a href="https://github.com/settings/tokens/new?scopes=repo&description=iPod+Store+Uploads" target="_blank" style="color:var(--accent);">Generate token here ↗</a> (need <b>repo</b> scope)</div>
+           <div style="display:flex;gap:8px;">
+             <input id="gh-token-input" type="password" placeholder="ghp_xxxxxxxxxxxx"
+               style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;outline:none;">
+             <button onclick="saveGhToken()" style="background:var(--ink);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Save</button>
+           </div>`
+      }
+    </div>`;
+}
+
+function saveGhToken() {
+  const val = (document.getElementById('gh-token-input').value || '').trim();
+  if (!val) return;
+  localStorage.setItem('gh_token', val);
+  renderOwnerPanel(); // re-render to show saved state
+}
+
+function clearGhToken() {
+  localStorage.removeItem('gh_token');
+  renderOwnerPanel();
+}
+
 // ── Media Upload Handlers ────────────────────────────────────
 
-function handleImageUpload(pid, input) {
+async function handleImageUpload(pid, input) {
   const p = products.find(x => x.id === pid);
   const files = Array.from(input.files);
   if (!files.length) return;
+  input.value = '';
 
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const src = e.target.result;
-      p.images.push(src);
+  if (!ghToken()) {
+    alert('⚠️ Please save your GitHub token in the panel first (top section).');
+    return;
+  }
+
+  for (const file of files) {
+    const filename  = `ipod${pid}_${Date.now()}_${safeFilename(file.name)}`;
+    const ghPath    = `images/${filename}`;
+    ghStatus(pid, `⏫ Uploading ${filename}…`, false);
+    try {
+      const dataURL  = await readFileAsDataURL(file);
+      const b64      = dataURLtoBase64(dataURL);
+      await ghPutFile(ghPath, b64, `Add image for iPod ${pid}: ${filename}`);
+      const url = ghRawURL(ghPath);
+      p.images.push(url);
+      await ghSaveDataJson();
       refreshImagePreviews(pid);
       renderGrid();
       setTimeout(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-visible')), 50);
-    };
-    reader.readAsDataURL(file);
-  });
-  input.value = ''; // reset so same file can be re-uploaded
+      ghStatus(pid, `✓ ${filename} saved to GitHub`, false);
+    } catch(e) {
+      ghStatus(pid, `✗ Upload failed: ${e.message}`, true);
+      console.error(e);
+    }
+  }
 }
 
 function refreshImagePreviews(pid) {
@@ -1881,40 +2060,74 @@ function refreshImagePreviews(pid) {
     </div>`).join('');
 }
 
-function removeImage(pid, idx) {
+async function removeImage(pid, idx) {
   const p = products.find(x => x.id === pid);
+  const url = p.images[idx];
   p.images.splice(idx, 1);
   refreshImagePreviews(pid);
   renderGrid();
   setTimeout(() => document.querySelectorAll('.product-card').forEach(c => c.classList.add('card-visible')), 50);
+  // Try to delete from GitHub too
+  if (ghToken() && url && url.includes('raw.githubusercontent.com')) {
+    try {
+      const ghPath = url.split(`/${GH_BRANCH}/`)[1];
+      if (ghPath) await ghDeleteFile(ghPath, `Remove image from iPod ${pid}`);
+    } catch(e) { console.warn('Could not delete from GitHub:', e); }
+  }
+  try { await ghSaveDataJson(); } catch(e) { console.warn(e); }
 }
 
-function handleVideoUpload(pid, input) {
+async function handleVideoUpload(pid, input) {
   const p = products.find(x => x.id === pid);
   const file = input.files[0];
   if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    p.video = e.target.result;
-    const wrap = document.getElementById('vid-preview-' + pid);
-    if (wrap) {
-      wrap.innerHTML = `
-        <div class="video-preview">
-          <video src="${p.video}" controls></video>
-          <button class="video-preview-remove" onclick="removeVideo(${pid})">✕ Remove</button>
-        </div>`;
-    }
-  };
-  reader.readAsDataURL(file);
   input.value = '';
+
+  if (!ghToken()) {
+    alert('⚠️ Please save your GitHub token in the panel first (top section).');
+    return;
+  }
+
+  const filename = `ipod${pid}_${Date.now()}_${safeFilename(file.name)}`;
+  const ghPath   = `videos/${filename}`;
+  ghStatus(pid, `⏫ Uploading video…`, false);
+
+  const wrap = document.getElementById('vid-preview-' + pid);
+  if (wrap) wrap.innerHTML = '<span style="font-size:12px;color:var(--ink-muted);display:block;margin-top:6px;">⏫ Uploading to GitHub…</span>';
+
+  try {
+    const dataURL = await readFileAsDataURL(file);
+    const b64     = dataURLtoBase64(dataURL);
+    await ghPutFile(ghPath, b64, `Add video for iPod ${pid}: ${filename}`);
+    const url = ghRawURL(ghPath);
+    p.video = url;
+    await ghSaveDataJson();
+    if (wrap) wrap.innerHTML = `
+      <div class="video-preview">
+        <video src="${url}" controls></video>
+        <button class="video-preview-remove" onclick="removeVideo(${pid})">✕ Remove</button>
+      </div>`;
+    ghStatus(pid, `✓ Video saved to GitHub`, false);
+  } catch(e) {
+    ghStatus(pid, `✗ Video upload failed: ${e.message}`, true);
+    if (wrap) wrap.innerHTML = '<span style="font-size:12px;color:#9A1A1A;display:block;margin-top:6px;">✗ Upload failed</span>';
+    console.error(e);
+  }
 }
 
-function removeVideo(pid) {
+async function removeVideo(pid) {
   const p = products.find(x => x.id === pid);
+  const url = p.video;
   p.video = null;
   const wrap = document.getElementById('vid-preview-' + pid);
   if (wrap) wrap.innerHTML = '<span style="font-size:12px;color:var(--ink-faint);display:block;margin-top:6px;">No video yet</span>';
+  if (ghToken() && url && url.includes('raw.githubusercontent.com')) {
+    try {
+      const ghPath = url.split(`/${GH_BRANCH}/`)[1];
+      if (ghPath) await ghDeleteFile(ghPath, `Remove video from iPod ${pid}`);
+    } catch(e) { console.warn('Could not delete from GitHub:', e); }
+  }
+  try { await ghSaveDataJson(); } catch(e) { console.warn(e); }
 }
 
 function toggleSold(id, isSold) {
